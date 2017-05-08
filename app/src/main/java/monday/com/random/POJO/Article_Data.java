@@ -12,6 +12,15 @@ public class Article_Data {
     private String topic_name;
     private String date;
     private String topic_id;
+    private String desc;
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
     public String getUsr() {
         return usr;

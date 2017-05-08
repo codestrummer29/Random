@@ -99,6 +99,7 @@ public class Login extends AppCompatActivity {
                             Toast.makeText(Login.this,data.getMsg(),Toast.LENGTH_SHORT).show();
                             shared_preferences_editor.putString("name",data.getContent().getName());
                             shared_preferences_editor.putString("email",data.getContent().getEmail());
+                            shared_preferences_editor.putString("uid",data.getContent().getUid());
                             shared_preferences_editor.commit();
                             Intent intent = new Intent(Login.this, HomeActivity.class);
                             startActivity(intent);

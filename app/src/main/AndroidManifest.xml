@@ -24,6 +24,10 @@
         </activity>
         <activity android:name=".HomePage.HomeActivity">
         </activity>
+        <activity android:name=".ArticleCreator.ArticleCreator">
+        </activity>
+        <activity android:name=".ArticleViewer.ViewArticle">
+        </activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package monday.com.random.HomePage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import monday.com.random.API.HomePageApi;
 import monday.com.random.APIresponse.HomeResponse;
+import monday.com.random.ArticleCreator.ArticleCreator;
+import monday.com.random.ArticleViewer.ViewArticle;
 import monday.com.random.POJO.Article_Data;
 import monday.com.random.R;
 import retrofit2.Call;
@@ -50,6 +53,7 @@ public class HomeActivity extends AppCompatActivity {
     LinearLayoutManager manager;
     int currentPosition;
     RecyclerView.Adapter listAdapter;
+    String filter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +62,7 @@ public class HomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         homelist = new ArrayList<>();
+
         article_list_view.setHasFixedSize(true);
         manager = new LinearLayoutManager(getApplicationContext());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -67,10 +72,19 @@ public class HomeActivity extends AppCompatActivity {
         listAdapter = new CustomAdapter(getApplicationContext());
         listAdapter.setHasStableIds(false);
         article_list_view.setAdapter(listAdapter);
+        filter = "";
 
         loadingBar.setVisibility(View.INVISIBLE);
 
-        getHomePageData("");
+        getHomePageData(filter);
+
+        fabBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, ArticleCreator.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -89,6 +103,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<HomeResponse> call, Response<HomeResponse> response) {
                 Log.d("here","here");
+                homelist = new ArrayList<>();
                 HomeResponse data = response.body();
                 loadingBar.setVisibility(View.INVISIBLE);
                 article_list_view.setVisibility(View.VISIBLE);
@@ -131,6 +146,14 @@ public class HomeActivity extends AppCompatActivity {
             }else {
                 holder.imageArt.setVisibility(View.GONE);
             }
+            holder.tvTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(HomeActivity.this, ViewArticle.class);
+                    intent.putExtra("article_desc",homelist.get(holder.getAdapterPosition()).getDesc());
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override
@@ -168,5 +191,10 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getHomePageData("");
+    }
 }
 
