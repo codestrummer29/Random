@@ -1,5 +1,7 @@
 package monday.com.random.APIresponse;
 
+import monday.com.random.POJO.User_Info;
+
 /**
  * Created by Saahil on 08/05/17.
  */
@@ -7,6 +9,15 @@ package monday.com.random.APIresponse;
 public class SignUpResponse {
     private int status;
     private String msg;
+    private User_Info content;
+
+    public User_Info getContent() {
+        return content;
+    }
+
+    public void setContent(User_Info content) {
+        this.content = content;
+    }
 
     public int getStatus() {
         return status;

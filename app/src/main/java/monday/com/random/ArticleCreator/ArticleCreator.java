@@ -41,7 +41,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ArticleCreator extends AppCompatActivity {
     Editor editor;
     SharedPreferences shared_preferences;
-    SharedPreferences.Editor shared_preferences_editor;
     String desc,uid,title,topic;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -165,11 +164,7 @@ public class ArticleCreator extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        if(id == R.id.draft){
-            //draft
-            String x = editor.getContentAsHTML();
-            Log.d("contentd",x);
-        }else if(id == R.id.publish){
+        if(id == R.id.publish){
             //publish
             String x = editor.getContentAsHTML();
             Log.d("contentp",x);

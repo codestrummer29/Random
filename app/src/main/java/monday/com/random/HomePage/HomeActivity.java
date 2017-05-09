@@ -9,16 +9,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +33,7 @@ import monday.com.random.APIresponse.HomeResponse;
 import monday.com.random.ArticleCreator.ArticleCreator;
 import monday.com.random.ArticleViewer.ViewArticle;
 import monday.com.random.POJO.Article_Data;
+import monday.com.random.Profile.Profile;
 import monday.com.random.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,7 +56,11 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.loadingBar)
     ProgressBar loadingBar;
 
+    @BindView(R.id.topic_spin)
+    Spinner topic_spin;
+
     ArrayList<Article_Data> homelist;
+    List<String> spinner_array;
     LinearLayoutManager manager;
     int currentPosition;
     RecyclerView.Adapter listAdapter;
@@ -76,7 +87,7 @@ public class HomeActivity extends AppCompatActivity {
 
         loadingBar.setVisibility(View.INVISIBLE);
 
-        getHomePageData(filter);
+        //getHomePageData(filter);
 
         fabBut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +95,25 @@ public class HomeActivity extends AppCompatActivity {
                 Intent intent = new Intent(HomeActivity.this, ArticleCreator.class);
                 startActivity(intent);
             }
+        });
+
+        topic_spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // your code here
+                if(position > 0){
+                    getHomePageData(position+"");
+                    filter = position+"";
+                }else {
+                    getHomePageData("");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
         });
 
     }
@@ -103,12 +133,24 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<HomeResponse> call, Response<HomeResponse> response) {
                 Log.d("here","here");
+                //setting up home page
                 homelist = new ArrayList<>();
                 HomeResponse data = response.body();
                 loadingBar.setVisibility(View.INVISIBLE);
                 article_list_view.setVisibility(View.VISIBLE);
                 homelist.addAll(data.getArticle_data());
                 listAdapter.notifyDataSetChanged();
+                //setting up spinnner
+                if(spinner_array == null) {
+                    spinner_array = new ArrayList<String>();
+                    spinner_array.add("None");
+                    for (int i = 0; i < data.getTopic_data().size(); i++) {
+                        spinner_array.add(data.getTopic_data().get(i).getT_name());
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                            getApplication(), R.layout.spinner_item, spinner_array);
+                    topic_spin.setAdapter(adapter);
+                }
             }
 
             @Override
@@ -154,6 +196,13 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
+            holder.tvTopic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getHomePageData(homelist.get(holder.getAdapterPosition()).getTopic_id());
+                }
+            });
         }
 
         @Override
@@ -192,9 +241,30 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.profile){
+            //Open Profile Page
+            Intent intent = new Intent(HomeActivity.this, Profile.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         getHomePageData("");
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }
 

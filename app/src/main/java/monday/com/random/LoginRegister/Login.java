@@ -120,4 +120,12 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(Login.this,LoginRoute.class);
+        startActivity(intent);
+        finish();
+    }
 }

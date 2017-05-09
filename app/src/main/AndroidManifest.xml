@@ -28,6 +28,8 @@
         </activity>
         <activity android:name=".ArticleViewer.ViewArticle">
         </activity>
+        <activity android:name=".Profile.Profile">
+        </activity>
     </application>
 
 </manifest>

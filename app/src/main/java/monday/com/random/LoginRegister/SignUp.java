@@ -97,10 +97,10 @@ public class SignUp extends AppCompatActivity{
                             Toast.makeText(SignUp.this,data.getMsg(),Toast.LENGTH_SHORT).show();
                             shared_preferences_editor.putString("name",name);
                             shared_preferences_editor.putString("email",e_mail);
+                            shared_preferences_editor.putString("uid",data.getContent().getUid());
                             shared_preferences_editor.commit();
                             Intent intent = new Intent(SignUp.this, HomeActivity.class);
                             startActivity(intent);
-                            finish();
                             finish();
                         }else {
                             Toast.makeText(SignUp.this,data.getMsg(),Toast.LENGTH_SHORT).show();
@@ -117,5 +117,13 @@ public class SignUp extends AppCompatActivity{
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(SignUp.this,LoginRoute.class);
+        startActivity(intent);
+        finish();
     }
 }

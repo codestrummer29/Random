@@ -2,15 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--<item-->
-        <!--android:id="@+id/draft"-->
-        <!--android:title="Draft"-->
-        <!--android:orderInCategory="100"-->
-        <!--app:showAsAction="ifRoom" />-->
-
     <item
-        android:id="@+id/publish"
-        android:title="Publish"
+        android:icon="@mipmap/ic_launcher_round"
+        android:id="@+id/profile"
         android:orderInCategory="100"
         app:showAsAction="ifRoom" />
 
